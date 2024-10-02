@@ -13,13 +13,11 @@
 #include "../include/portab.h"
 #include "../include/dll.h"
 
-
 #if defined(DDS_MEMORY_LEAKS) && defined(_MSC_VER)
-  #define DDS_MEMORY_LEAKS_WIN32
-  #define _CRTDBG_MAP_ALLOC
-  #include <crtdbg.h>
+#define DDS_MEMORY_LEAKS_WIN32
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
 #endif
-
 
 #define THREADMEM_SMALL_MAX_MB 30
 #define THREADMEM_SMALL_DEF_MB 20
@@ -43,7 +41,6 @@ All hand identities are given as
 
 #define handId(hand, relative) (hand + relative) & 3
 
-
 extern int lho[DDS_HANDS];
 extern int rho[DDS_HANDS];
 extern int partner[DDS_HANDS];
@@ -61,7 +58,6 @@ extern int counttable[8192];
 extern char relRank[8192][15];
 extern unsigned short int winRanks[8192][14];
 
-
 struct moveGroupType
 {
   // There are at most 7 groups of bit "runs" in a 13-bit vector
@@ -72,8 +68,7 @@ struct moveGroupType
   int gap[7];
 };
 
-extern moveGroupType groupData[8192];
-
+extern struct moveGroupType groupData[8192];
 
 struct moveType
 {
@@ -81,12 +76,12 @@ struct moveType
   int rank;
   int sequence; /* Whether or not this move is the
                                      first in a sequence */
-  int weight; /* Weight used at sorting */
+  int weight;   /* Weight used at sorting */
 };
 
 struct movePlyType
 {
-  moveType move[14];
+  struct moveType move[14];
   int current;
   int last;
 };
@@ -96,7 +91,6 @@ struct highCardType
   int rank;
   int hand;
 };
-
 
 struct pos
 {
@@ -109,18 +103,17 @@ struct pos
   /* Cards that win by rank, firstindex is depth. */
   int first[50];
   /* Hand that leads the trick for each ply */
-  moveType move[50];
+  struct moveType move[50];
   /* Presently winning move */
   int handRelFirst;
   /* The current hand, relative first hand */
   int tricksMAX;
   /* Aggregated tricks won by MAX */
-  highCardType winner[DDS_SUITS];
+  struct highCardType winner[DDS_SUITS];
   /* Winning rank of trick. */
-  highCardType secondBest[DDS_SUITS];
+  struct highCardType secondBest[DDS_SUITS];
   /* Second best rank. */
 };
-
 
 struct evalType
 {
@@ -149,14 +142,14 @@ struct absRankType // 2 bytes
 
 struct relRanksType // 120 bytes
 {
-  absRankType absRank[15][DDS_SUITS];
+  struct absRankType absRank[15][DDS_SUITS];
 };
 
 struct paramType
 {
   int noOfBoards;
-  boards * bop;
-  solvedBoards * solvedp;
+  struct boards *bop;
+  struct solvedBoards *solvedp;
   int error;
 };
 

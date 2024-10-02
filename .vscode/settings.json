@@ -1,0 +1,9 @@
+{
+  "files.associations": {
+    "*.svg": "html",
+    "unordered_map": "cpp",
+    "string": "cpp",
+    "array": "cpp",
+    "stdio.h": "c"
+  }
+}

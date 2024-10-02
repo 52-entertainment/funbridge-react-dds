@@ -18,3 +18,6 @@ test/itest
 *.exp
 *.lib
 *.res
+
+.DS_Store
+build
