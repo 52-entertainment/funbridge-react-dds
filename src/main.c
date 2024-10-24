@@ -72,24 +72,31 @@ EMSCRIPTEN_KEEPALIVE char *do_dds_solve_board(const char *contract, const char *
   SolveBoardPBN(dpbn, 0, 3, 1, &ft, 0);
 
   char *json_result = (char *)malloc(1024);
-  strcpy(json_result, "{");
-
-  for (int i = 0; i < ft.cards; ++i)
+  if (ft.cards == 0)
   {
-    char card[16];
-    snprintf(card, sizeof(card), "\"%c%c\":%d,", "23456789TJQKA"[ft.rank[i] - 2], "SHDC"[ft.suit[i]], ft.score[i]);
-    strcat(json_result, card);
+    strcpy(json_result, "{}");
+  }
+  else
+  {
+    strcpy(json_result, "{");
 
-    for (int j = ft.rank[i] - 1; j >= 2; --j)
+    for (int i = 0; i < ft.cards; ++i)
     {
-      if ((ft.equals[i] & (1 << j)) > 0)
+      char card[16];
+      snprintf(card, sizeof(card), "\"%c%c\":%d,", "23456789TJQKA"[ft.rank[i] - 2], "SHDC"[ft.suit[i]], ft.score[i]);
+      strcat(json_result, card);
+
+      for (int j = ft.rank[i] - 1; j >= 2; --j)
       {
-        snprintf(card, sizeof(card), "\"%c%c\":%d,", "23456789TJQKA"[j - 2], "SHDC"[ft.suit[i]], ft.score[i]);
-        strcat(json_result, card);
+        if ((ft.equals[i] & (1 << j)) > 0)
+        {
+          snprintf(card, sizeof(card), "\"%c%c\":%d,", "23456789TJQKA"[j - 2], "SHDC"[ft.suit[i]], ft.score[i]);
+          strcat(json_result, card);
+        }
       }
     }
-  }
 
-  json_result[strlen(json_result) - 1] = '}';
+    json_result[strlen(json_result) - 1] = '}';
+  }
   return json_result;
 }
